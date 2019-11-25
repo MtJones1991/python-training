@@ -81,10 +81,13 @@ def help_menu():
 
 #################################################################################### Game interactivity ##############################################################
 def print_location():
-    print("\n" + ('#' *(4 + len(myPlayer.location))))
+    print("\n" + ('#' *(15 + len(myPlayer.location))))
     print("# " + myPlayer.location.upper() + ' #')
+    print("# " + zonemap[myPlayer.location][ZONE_NAME] + " #")
     print("# " + zonemap[myPlayer.location][DESCRIPTION] + " #")
-    print("\n" + ('#' *(4 + len(myPlayer.location))))
+    print("\n" + ('#' *(15 + len(myPlayer.location))))
+    playsound(zonemap[myPlayer.location][SOUND_EFFECT])
+
 
 
 def prompt():
@@ -113,36 +116,30 @@ def player_move(myAction):
         playsound("music/walk2.wav")
         playsound("music/walk.wav")
         destination = zonemap[myPlayer.location][UP]
-        sound = zonemap[myPlayer.location][SOUND]
-        movement_handler(destination, sound)
+        movement_handler(destination)
     if destination in ["down", "south"]:
         playsound("music/walk.wav")
         playsound("music/walk2.wav")
         playsound("music/walk.wav")
         destination = zonemap[myPlayer.location][DOWN]
-        sound = zonemap[myPlayer.location][SOUND]
-        movement_handler(destination, sound)
+        movement_handler(destination)
     if destination in ["left", "west"]:
         playsound("music/walk.wav")
         playsound("music/walk2.wav")
         playsound("music/walk.wav")
         destination = zonemap[myPlayer.location][LEFT]
-        sound = zonemap[myPlayer.location][SOUND]
-        movement_handler(destination, sound)
+        movement_handler(destination)
     if destination in ["right", "east"]:
         playsound("music/walk.wav")
         playsound("music/walk2.wav")
         playsound("music/walk.wav")
         destination = zonemap[myPlayer.location][RIGHT]
         town_name  = zonemap[myPlayer.location][ZONE_NAME]
-        sound = zonemap[myPlayer.location][SOUND]
+        movement_handler(destination)
 
-        movement_handler(destination, sound)
-
-def movement_handler(destination, sound):
-    print("\n" + "You have moved to zone " + zonemap[myPlayer.location][ZONE_NAME] + ".")
+def movement_handler(destination):
+    print("\n" + "You have moved to " + zonemap[myPlayer.location][ZONE_NAME] + ". " + zonemap[myPlayer.location][DESCRIPTION])
     myPlayer.location = destination
-    playsound(sound)
     print_location()
 
 
@@ -215,7 +212,7 @@ def setup_game():
     for character in question3:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.05)
+        time.sleep(0.01)
 
     thee_dots = ". . . . . \n"
     speech1 = "Well met..." + player_name + " and welcome to Galarian. A land of adventue, riches, reknown... BIST. \n" 
@@ -225,25 +222,25 @@ def setup_game():
     for character in thee_dots:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.05)
+        time.sleep(0.01)
     for character in speech1:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.03)
+        time.sleep(0.01)
     for character in speech2:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.05)
+        time.sleep(0.01)
     for character in speech3:
         sys.stdout.write(character)
         sys.stdout.flush()
-        time.sleep(0.07)
+        time.sleep(0.01)
     os.system('cls')
 
-    playsound("music/witch.wav")
     print("####################")
     print(" --- LETS BEGIN ---")
     print("####################")
+    playsound("music/witch.wav")
     main_game_loop()
 
 ### MAP ###
@@ -260,14 +257,14 @@ a1 a2... Player starts at b2
 ----
 """
 ZONE_NAME = ""
-SOUND = ""
 DESCRIPTION = "description"
 EXAMINATION = "examine"
 SOLVED = False
 UP = "up", "north"
 DOWN = "down", "south"
 LEFT = "left", "west"
-RIGHT = "right", "east"
+RIGHT = "right", "east",
+SOUND_EFFECT = "sound effect"
 
 solved_places = {
     "a1": False, "a2": False, "a3": False, "a4": False,
@@ -279,29 +276,28 @@ solved_places = {
 zonemap = {
     "a1": {
         ZONE_NAME: "Highbury",
-        SOUND: "music/spell.wav",
-        DESCRIPTION: "The humble town of Highbury.",
+        DESCRIPTION: "Highbury is a small town on the outskirts of the 5 kings mountain range.",
         EXAMINATION: "examine",
         SOLVED: False,
         UP: "d1",
         DOWN: "b1",
         LEFT: "a4",
-        RIGHT: "a2"
+        RIGHT: "a2",
+        SOUND_EFFECT: "music/spell.wav"
     },
         "a2": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
         UP: "d2",
         DOWN: "b2",
         LEFT: "a1",
-        RIGHT: "a3"
+        RIGHT: "a3",
+        SOUND_EFFECT: "music/spell.wav"
     },
         "a3": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -312,7 +308,6 @@ zonemap = {
     },
         "a4": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "A crappy little town",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -323,7 +318,6 @@ zonemap = {
     },
         "b1": {
         ZONE_NAME: "Town One",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "The humble town of Highbury.",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -334,7 +328,6 @@ zonemap = {
     },
         "b2": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -345,7 +338,6 @@ zonemap = {
     },
         "b3": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -356,7 +348,6 @@ zonemap = {
     },
         "b4": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "A crappy little town",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -367,7 +358,6 @@ zonemap = {
     },
         "c1": {
         ZONE_NAME: "Town One",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "The humble town of Highbury.",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -378,7 +368,6 @@ zonemap = {
     },
         "c2": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -389,7 +378,6 @@ zonemap = {
     },
         "c3": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -400,7 +388,6 @@ zonemap = {
     },
         "c4": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "A crappy little town",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -411,7 +398,6 @@ zonemap = {
     },
         "d1": {
         ZONE_NAME: "Town One",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "The humble town of Highbury.",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -422,7 +408,6 @@ zonemap = {
     },
         "d2": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -433,7 +418,6 @@ zonemap = {
     },
         "d3": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "description",
         EXAMINATION: "examine",
         SOLVED: False,
@@ -444,7 +428,6 @@ zonemap = {
     },
         "d4": {
         ZONE_NAME: "Town Two",
-        SOUND: "music/spell.wav",
         DESCRIPTION: "A crappy little town",
         EXAMINATION: "examine",
         SOLVED: False,
